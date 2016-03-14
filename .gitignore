@@ -1,0 +1,10 @@
+/build/
+/target/
+*.iml
+.idea/
+.project
+.classpath
+.settings/
+src/main/webapp/VAADIN/widgetsets/*
+src/main/webapp/VAADIN/gwt-unitCache/*
+src/main/webapp/VAADIN/themes/evidence/styles.css
