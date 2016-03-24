@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.Navigator.ComponentContainerViewDisplay;
 import com.vaadin.server.VaadinRequest;
@@ -14,6 +15,7 @@ import ui.view.*;
 
 @SuppressWarnings("serial")
 @Theme("evidence")
+@Widgetset("war.MyAppWidgetset")
 public class EvidenceUI extends UI {
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = EvidenceUI.class)
@@ -31,7 +33,6 @@ public class EvidenceUI extends UI {
 		layout.setMargin(true);
 		layout.setSpacing(true);
 		setContent(layout);
-		setTheme("chameleon");
 		ComponentContainerViewDisplay viewDisplay = new ComponentContainerViewDisplay(layout);
 		navigator = new Navigator(UI.getCurrent(), viewDisplay);
 		navigator.addView("", new LoginView());
