@@ -1,6 +1,6 @@
 package dummy;
 
-import core.db.HibernateUtil;
+import core.TestHibernateUtil;
 import core.db.entity.Office;
 import org.hibernate.Session;
 import org.junit.Test;
@@ -17,9 +17,9 @@ public class DummyTest {
     @Test
     public void test() {
         logger.info("Open session");
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = TestHibernateUtil.getSessionFactory().openSession();
         Office office = new Office();
-        office.setName("Kosice2");
+        office.setName("New york");
         session.save(office);
         logger.info("Here we are before close()");
         session.close();

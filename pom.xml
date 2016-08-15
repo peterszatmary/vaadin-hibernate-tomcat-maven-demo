@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>Evidence</groupId>
-    <artifactId>Evidence</artifactId>
+    <groupId>com.szatmary.peter</groupId>
+    <artifactId>vaadin-hibernate-tomcat-maven-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -10,10 +10,22 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vaadin.version>7.6.3</vaadin.version>
         <java.version>1.8</java.version>
+        <servlet.version>3.0.1</servlet.version>
+        <hibernate.version>5.1.0.Final</hibernate.version>
+        <mysql.connector.version>[5.1.0,5.2)</mysql.connector.version>
+        <h2.version>1.4.192</h2.version>
+        <junit.version>4.12</junit.version>
+        <selenium.version>2.52.0</selenium.version>
         <tomcat.version>8.0.32</tomcat.version>
         <tomcat.user>tomcat</tomcat.user>
         <tomcat.password>tomcat</tomcat.password>
         <tomcat.url>http://localhost:8080/manager/text</tomcat.url>
+        <resource.plugin.version>2.6</resource.plugin.version>
+        <source.plugin.version>2.4</source.plugin.version>
+        <compiler.plugin.version>3.3</compiler.plugin.version>
+        <war.plugin.version>2.3</war.plugin.version>
+        <clean.plugin.version>2.6.1</clean.plugin.version>
+        <tomcat7.plugin.version>2.2</tomcat7.plugin.version>
     </properties>
 
     <repositories>
@@ -38,7 +50,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <version>${servlet.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -83,28 +95,38 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.1.0.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>[5.1.0,5.2)</version>
+            <version>${mysql.connector.version}</version>
         </dependency>
 
-        <dependency>
+        <dependency><!-- not used, is here like example of ui testing dependency -->
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>2.52.0</version>
+            <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -112,18 +134,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>${resource.plugin.version}</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
+                <version>${source.plugin.version}</version>
             </plugin>
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>${compiler.plugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -133,7 +155,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>${war.plugin.version}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>
@@ -171,7 +193,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.6.1</version>
+                <version>${clean.plugin.version}</version>
                 <!-- Clean up also any pre-compiled themes -->
                 <configuration>
                     <filesets>
@@ -189,7 +211,7 @@
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
+                <version>${tomcat7.plugin.version}</version>
                 <configuration>
                     <url>${tomcat.url}</url>
                     <username>${tomcat.user}</username>
