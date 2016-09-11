@@ -18,7 +18,7 @@ public class User {
 
 	@Column(name="status")
 	private int status;
-        
+
 	@Column(name="name")
 	private String name;
 

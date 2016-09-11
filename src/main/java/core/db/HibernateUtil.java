@@ -3,12 +3,9 @@ package core.db;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.io.File;
-
 public class HibernateUtil {
 
 	private static final SessionFactory sessionFactory;
-	//private static final ServiceRegistry serviceRegistry;
 
 	static {
 		try {

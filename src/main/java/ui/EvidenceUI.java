@@ -38,6 +38,4 @@ public class EvidenceUI extends UI {
 		navigator.addView("", new LoginView());
 		navigator.addView(MAINMANAGERVIEW, new MainManagerView());
 	}
-		
-
 }
