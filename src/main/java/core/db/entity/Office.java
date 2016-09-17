@@ -1,10 +1,11 @@
 package core.db.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="office")
-public class Office {
+public class Office implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)

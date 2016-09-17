@@ -1,16 +1,16 @@
 package core.db.entity;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
+@NamedQueries({
+		@NamedQuery(name="user.byEmailAndPassword", query="from User where email=:email and password=:password"),
+		@NamedQuery(name="user.byEmail", query="from User where email=:email")
+})
 @Entity
 @Table(name="user")
-public class User {
+public class User  implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -35,7 +35,7 @@ public class User {
 	private Date contractStart;
 
 	@Column(name="contract_end")
-	private Date contract_end;
+	private Date contractEnd;
 
 	@Column(name="project_id")
 	private int projectId;
@@ -96,12 +96,12 @@ public class User {
 		this.contractType = contractType;
 	}
 
-	public Date getContract_end() {
-		return contract_end;
+	public Date getContractEnd() {
+		return contractEnd;
 	}
 
-	public void setContract_end(Date contract_end) {
-		this.contract_end = contract_end;
+	public void setContractEnd(Date contractEnd) {
+		this.contractEnd = contractEnd;
 	}
 
 	public int getProjectId() {
@@ -111,7 +111,6 @@ public class User {
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
-
 
 	@Override
 	public String toString() {
@@ -123,7 +122,7 @@ public class User {
 				", email='" + email + '\'' +
 				", contractType='" + contractType + '\'' +
 				", contractStart=" + contractStart +
-				", contract_end=" + contract_end +
+				", contractEnd=" + contractEnd +
 				", projectId=" + projectId +
 				'}';
 	}

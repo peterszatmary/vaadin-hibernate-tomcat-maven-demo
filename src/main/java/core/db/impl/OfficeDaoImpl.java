@@ -1,42 +1,83 @@
 package core.db.impl;
 
+import core.db.HibernateUtil;
 import core.db.entity.Office;
 import core.db.ints.OfficeDao;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.logging.Logger;
+
 
 public class OfficeDaoImpl implements OfficeDao {
 
+	private final Logger logger = Logger.getLogger(getClass().getName());
+	private SessionFactory sessionFactory;
+
+	// for dev
+	public OfficeDaoImpl() {
+		sessionFactory = HibernateUtil.getSessionFactory();
+	}
+
+	// for tests
+	public OfficeDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+
 	@Override
-	public void addOffice(Office office) {
-		// TODO Auto-generated method stub
-		
+	public void create(Office office) {
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			session.save(office);
+			session.getTransaction().commit();
+		} catch (HibernateException ex) {
+			logger.info("Create error: " + ex.getLocalizedMessage());
+		}
 	}
 
 	@Override
-	public void deleteOffice(Office office) {
-		// TODO Auto-generated method stub
-		
+	public void delete(Office office) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<Office> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Office getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Office getById(Long id) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void updateOffice(Office office) {
-		// TODO Auto-generated method stub
-		
+	public void update(Office office) {
+		throw new UnsupportedOperationException();
 	}
 
-	
+	@Override
+	public List<Office> selectPage(int start, int count) {
+		throw new UnsupportedOperationException();
+	}
 
+	@Override
+	public Long countAll() {
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			Query query = session.createQuery("select count(*) from Office");
+			return (Long)query.uniqueResult();
+		} catch(HibernateException ex) {
+			logger.info("getCount error: " + ex.getLocalizedMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public Integer deleteAll() {
+		throw new UnsupportedOperationException();
+	}
 }
