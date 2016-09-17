@@ -4,6 +4,8 @@ package core.db.impl;
 import core.TestHibernateUtil;
 import core.db.entity.User;
 import core.db.ints.UserDao;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsNull;
 import org.hibernate.SessionFactory;
 import org.junit.*;
 
@@ -17,17 +19,16 @@ public class UserDaoImplTest {
 	private static SessionFactory sessionFactory;
 	private UserDao userDao;
 
-	@Before
-	public void init() {
-		logger.info("Initialization started");
-		sessionFactory = TestHibernateUtil.getSessionFactory();
-		userDao = new UserDaoImpl(sessionFactory);
-	}
-
 	@After
-	public void clean() {
+	public void after() {
 		logger.info("Cleaning started");
 		userDao.deleteAll();
+	}
+
+	@Before
+	public void before() {
+		sessionFactory = TestHibernateUtil.getSessionFactory();
+		userDao = new UserDaoImpl(sessionFactory);
 	}
 
 	@AfterClass
@@ -51,8 +52,8 @@ public class UserDaoImplTest {
 		User afterUpdate = userDao.getById(user.getId());
 		Long countAfter = userDao.countAll();
 
-		Assert.assertEquals("newmail", afterUpdate.getEmail());
-		Assert.assertTrue(countBefore + 1 == countAfter);
+		Assert.assertThat("newmail", IsEqual.equalTo(afterUpdate.getEmail()));
+		Assert.assertThat(countBefore + 1, IsEqual.equalTo(countAfter));
 	}
 
 	@Test
@@ -63,7 +64,7 @@ public class UserDaoImplTest {
 		userDao.create(getUser(3));
 
 		List<User> users = userDao.getAll();
-		Assert.assertEquals(3, users.size());
+		Assert.assertThat(3, IsEqual.equalTo(users.size()));
 	}
 
 	@Test
@@ -71,7 +72,7 @@ public class UserDaoImplTest {
 		Long countBefore = userDao.countAll();
 		userDao.create(getUser(1));
 		Long countAfter = userDao.countAll();
-		Assert.assertTrue(countBefore + 1 == countAfter);
+		Assert.assertThat(countBefore + 1, IsEqual.equalTo(countAfter));
 	}
 
 	@Test
@@ -83,15 +84,15 @@ public class UserDaoImplTest {
 		userDao.create(getUser(3));
 
 		Long count = userDao.countAll();
-		Assert.assertTrue(3 == count);
+		Assert.assertThat(3L, IsEqual.equalTo(count));
 
 		userDao.delete(user);
 		count = userDao.countAll();
 		List<User> users = userDao.getAll();
 
-		Assert.assertEquals("email-2", users.get(0).getEmail());
-		Assert.assertEquals("email-3", users.get(1).getEmail());
-		Assert.assertTrue(2 == count);
+		Assert.assertThat("email-2", IsEqual.equalTo(users.get(0).getEmail()));
+		Assert.assertThat("email-3", IsEqual.equalTo(users.get(1).getEmail()));
+		Assert.assertThat(2L, IsEqual.equalTo(count));
 	}
 
 	@Test
@@ -106,11 +107,11 @@ public class UserDaoImplTest {
 		List<User> users = userDao.selectPage(2, 4);
 
 		Long count = userDao.countAll();
-		Assert.assertTrue(5 == count);
-		Assert.assertTrue(3 == users.size());
-		Assert.assertEquals("email-3", users.get(0).getEmail());
-		Assert.assertEquals("email-4", users.get(1).getEmail());
-		Assert.assertEquals("email-5", users.get(2).getEmail());
+		Assert.assertThat(5L, IsEqual.equalTo(count));
+		Assert.assertThat(3, IsEqual.equalTo(users.size()));
+		Assert.assertThat("email-3", IsEqual.equalTo(users.get(0).getEmail()));
+		Assert.assertThat("email-4", IsEqual.equalTo(users.get(1).getEmail()));
+		Assert.assertThat("email-5", IsEqual.equalTo(users.get(2).getEmail()));
 	}
 
 
@@ -126,10 +127,10 @@ public class UserDaoImplTest {
 		User user = userDao.getByEmailAndPassword("email-1", "password-1");
 
 		Long count = userDao.countAll();
-		Assert.assertTrue(5 == count);
-		Assert.assertNotNull(user);
-		Assert.assertEquals("email-1", user.getEmail());
-		Assert.assertEquals("name-1", user.getName());
+		Assert.assertThat(5L, IsEqual.equalTo(count));
+		Assert.assertThat(user, IsNull.notNullValue());
+		Assert.assertThat("email-1", IsEqual.equalTo(user.getEmail()));
+		Assert.assertThat("name-1", IsEqual.equalTo(user.getName()));
 	}
 
 	@Test
@@ -143,10 +144,10 @@ public class UserDaoImplTest {
 
 		User user = userDao.getById(3L);
 
-		Assert.assertNotNull(user);
-		Assert.assertEquals("email-3", user.getEmail());
-		Assert.assertEquals("name-3", user.getName());
-		Assert.assertEquals(3, user.getProjectId());
+		Assert.assertThat(user, IsNull.notNullValue());
+		Assert.assertThat("email-3", IsEqual.equalTo(user.getEmail()));
+		Assert.assertThat("name-3", IsEqual.equalTo(user.getName()));
+		Assert.assertThat(3, IsEqual.equalTo(user.getProjectId()));
 	}
 
 

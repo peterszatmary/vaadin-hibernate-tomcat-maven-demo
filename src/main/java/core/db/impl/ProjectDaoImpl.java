@@ -50,9 +50,18 @@ public class ProjectDaoImpl implements ProjectDao {
 		throw new UnsupportedOperationException();
 	}
 
+	// load, dont hit db, just cache
+	// get hit db
 	@Override
 	public Project getById(Long id) {
-		throw new UnsupportedOperationException();
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			Project project = session.get(Project.class, id);
+			return project;
+		} catch (HibernateException ex) {
+			logger.info("Get by id error: " + ex.getLocalizedMessage());
+			return null;
+		}
 	}
 
 	@Override
@@ -71,7 +80,7 @@ public class ProjectDaoImpl implements ProjectDao {
 			session.beginTransaction();
 			Query query = session.createQuery("select count(*) from Project");
 			return (Long)query.uniqueResult();
-		} catch(HibernateException ex) {
+		} catch (HibernateException ex) {
 			logger.info("getCount error: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -79,7 +88,14 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public Integer deleteAll() {
-		throw new UnsupportedOperationException();
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			Query query = session.createQuery("delete from Project");
+			return query.executeUpdate();
+		} catch (HibernateException ex) {
+			logger.info("deleteAll error: " + ex.getLocalizedMessage());
+			return null;
+		}
 	}
 
 }

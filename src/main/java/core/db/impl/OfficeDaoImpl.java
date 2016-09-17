@@ -28,6 +28,9 @@ public class OfficeDaoImpl implements OfficeDao {
 	}
 
 
+	// save
+	// - will execute an INSERT statement called outside or inside of transaction boundaries
+	// - identifier value will be assigned to the persistent instance immediately
 	@Override
 	public void create(Office office) {
 		try (Session session = sessionFactory.openSession()) {
@@ -70,7 +73,7 @@ public class OfficeDaoImpl implements OfficeDao {
 			session.beginTransaction();
 			Query query = session.createQuery("select count(*) from Office");
 			return (Long)query.uniqueResult();
-		} catch(HibernateException ex) {
+		} catch (HibernateException ex) {
 			logger.info("getCount error: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -78,6 +81,13 @@ public class OfficeDaoImpl implements OfficeDao {
 
 	@Override
 	public Integer deleteAll() {
-		throw new UnsupportedOperationException();
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			Query query = session.createQuery("delete from Office");
+			return query.executeUpdate();
+		} catch (HibernateException ex) {
+			logger.info("deleteAll error: " + ex.getLocalizedMessage());
+			return null;
+		}
 	}
 }

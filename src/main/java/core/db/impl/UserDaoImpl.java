@@ -27,6 +27,8 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	// persist
+	// -  will not execute an INSERT statement if it is called outside of transaction boundaries
+	// - it doesn't guarantee that the identifier value will be assigned to the persistent instance immediately
 	@Override
 	public void create(User user) {
 		try (Session session = sessionFactory.openSession()) {
@@ -99,7 +101,7 @@ public class UserDaoImpl implements UserDao {
 			query.setString("password", password);
 			List<User> list = query.list();
 			return list.size() > 1 ? null : list.get(0);
-		} catch(HibernateException ex) {
+		} catch (HibernateException ex) {
 			logger.info("Select user by nick and password: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -114,7 +116,7 @@ public class UserDaoImpl implements UserDao {
 			query.setFirstResult(start);
 			query.setMaxResults(count);
 			return query.list();
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			logger.info("Select page error: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -126,7 +128,7 @@ public class UserDaoImpl implements UserDao {
 			session.beginTransaction();
 			Query query = session.createQuery("select count(*) from User");
 			return (Long)query.uniqueResult();
-		} catch(HibernateException ex) {
+		} catch (HibernateException ex) {
 			logger.info("countAll error: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -138,7 +140,7 @@ public class UserDaoImpl implements UserDao {
 			session.beginTransaction();
 			Query query = session.createQuery("delete from User");
 			return query.executeUpdate();
-		} catch(HibernateException ex) {
+		} catch (HibernateException ex) {
 			logger.info("deleteAll error: " + ex.getLocalizedMessage());
 			return null;
 		}
