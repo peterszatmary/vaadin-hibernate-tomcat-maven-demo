@@ -6,11 +6,11 @@ import java.sql.Date;
 
 @Entity
 @Table(name="project")
-public class Project  implements Serializable {
+public class Project implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	@Column(name="name")
 	private String name;
@@ -25,7 +25,7 @@ public class Project  implements Serializable {
 	private Date projectEnd;
 
 	@Column(name="successful")
-	private boolean successful;
+	private Boolean successful;
 
 	public Project() { }
 
@@ -61,15 +61,15 @@ public class Project  implements Serializable {
 		this.projectEnd = projectEnd;
 	}
 
-	public boolean isSuccessful() {
+	public Boolean isSuccessful() {
 		return successful;
 	}
 
-	public void setSuccessful(boolean successful) {
+	public void setSuccessful(Boolean successful) {
 		this.successful = successful;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

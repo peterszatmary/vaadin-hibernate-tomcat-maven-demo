@@ -16,7 +16,7 @@ public class Office implements Serializable {
 
 	public Office() { }
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

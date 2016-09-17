@@ -10,14 +10,14 @@ import java.sql.Date;
 })
 @Entity
 @Table(name="user")
-public class User  implements Serializable {
+public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	@Column(name="status")
-	private int status;
+	private Integer status;
 
 	@Column(name="name")
 	private String name;
@@ -38,7 +38,7 @@ public class User  implements Serializable {
 	private Date contractEnd;
 
 	@Column(name="project_id")
-	private int projectId;
+	private Integer projectId;
 
 
 	public User() { }
@@ -51,7 +51,7 @@ public class User  implements Serializable {
 		this.contractStart = contractStart;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -60,7 +60,7 @@ public class User  implements Serializable {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -104,11 +104,11 @@ public class User  implements Serializable {
 		this.contractEnd = contractEnd;
 	}
 
-	public int getProjectId() {
+	public Integer getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(int projectId) {
+	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
 
