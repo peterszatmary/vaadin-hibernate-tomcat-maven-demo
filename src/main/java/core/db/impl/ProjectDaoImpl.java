@@ -4,7 +4,6 @@ import core.db.HibernateUtil;
 import core.db.entity.Project;
 import core.db.ints.ProjectDao;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -78,8 +77,9 @@ public class ProjectDaoImpl implements ProjectDao {
 	public Long countAll() {
 		try (Session session = sessionFactory.openSession()) {
 			session.beginTransaction();
-			Query query = session.createQuery("select count(*) from Project");
-			return (Long)query.uniqueResult();
+			return (Long) session.
+					createQuery("select count(*) from Project").
+					uniqueResult();
 		} catch (HibernateException ex) {
 			logger.info("getCount error: " + ex.getLocalizedMessage());
 			return null;
@@ -90,8 +90,9 @@ public class ProjectDaoImpl implements ProjectDao {
 	public Integer deleteAll() {
 		try (Session session = sessionFactory.openSession()) {
 			session.beginTransaction();
-			Query query = session.createQuery("delete from Project");
-			return query.executeUpdate();
+			return session.
+					createQuery("delete from Project").
+					executeUpdate();
 		} catch (HibernateException ex) {
 			logger.info("deleteAll error: " + ex.getLocalizedMessage());
 			return null;

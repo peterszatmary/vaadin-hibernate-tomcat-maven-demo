@@ -4,7 +4,6 @@ import core.db.HibernateUtil;
 import core.db.entity.Office;
 import core.db.ints.OfficeDao;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -71,8 +70,9 @@ public class OfficeDaoImpl implements OfficeDao {
 	public Long countAll() {
 		try (Session session = sessionFactory.openSession()) {
 			session.beginTransaction();
-			Query query = session.createQuery("select count(*) from Office");
-			return (Long)query.uniqueResult();
+			return (Long) session.
+					createQuery("select count(*) from Office").
+					uniqueResult();
 		} catch (HibernateException ex) {
 			logger.info("getCount error: " + ex.getLocalizedMessage());
 			return null;
@@ -83,8 +83,9 @@ public class OfficeDaoImpl implements OfficeDao {
 	public Integer deleteAll() {
 		try (Session session = sessionFactory.openSession()) {
 			session.beginTransaction();
-			Query query = session.createQuery("delete from Office");
-			return query.executeUpdate();
+			return session.
+					createQuery("delete from Office").
+					executeUpdate();
 		} catch (HibernateException ex) {
 			logger.info("deleteAll error: " + ex.getLocalizedMessage());
 			return null;
