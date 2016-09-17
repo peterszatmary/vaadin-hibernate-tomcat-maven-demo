@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS `evidence_db`.`project` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '',
   `name` VARCHAR(50) NOT NULL COMMENT '',
   `description` TEXT NULL DEFAULT NULL COMMENT '',
-  `project_start` DATE NULL DEFAULT NULL COMMENT '',
-  `project_end` DATE NULL DEFAULT NULL COMMENT '',
+  `project_start` TIMESTAMP NULL DEFAULT NULL COMMENT '',
+  `project_end` TIMESTAMP NULL DEFAULT NULL COMMENT '',
   `successful` TINYINT(1) NULL DEFAULT NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '')
 ENGINE = InnoDB
@@ -56,9 +56,8 @@ CREATE TABLE IF NOT EXISTS `evidence_db`.`user` (
   `password` VARCHAR(45) NOT NULL COMMENT '',
   `email` VARCHAR(45) NOT NULL COMMENT '',
   `contract_type` VARCHAR(20) NOT NULL COMMENT '',
-  `contract_start` DATE NULL DEFAULT NULL COMMENT '',
-  `contract_end` DATE NULL DEFAULT NULL COMMENT '',
-  `id_project` INT(11) NULL DEFAULT NULL COMMENT '',
+  `contract_start` TIMESTAMP NULL DEFAULT NULL COMMENT '',
+  `contract_end` TIMESTAMP NULL DEFAULT NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '')
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -70,7 +69,6 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `evidence_db`.`work_time` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '',
   `id_user` BIGINT NULL COMMENT '',
-  `id_project` BIGINT NULL COMMENT '',
   `id_office` BIGINT NULL COMMENT '',
   `start_time` TIME NULL COMMENT '',
   `end_time` TIME NULL COMMENT '',

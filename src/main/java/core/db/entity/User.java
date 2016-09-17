@@ -1,8 +1,10 @@
 package core.db.entity;
 
+import core.ContractType;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @NamedQueries({
 		@NamedQuery(name="user.byEmailAndPassword", query="from User where email=:email and password=:password"),
@@ -29,17 +31,18 @@ public class User implements Serializable {
 	private String email;
 
 	@Column(name="contract_type")
-	private String contractType;
+	@Enumerated(EnumType.STRING) // in db
+	private ContractType contractType;
 
 	@Column(name="contract_start")
+	// you can use java.util.Date and java.util.Calendar to store data and then have several representations of
+	// it, such as a date, an hour, or milliseconds.
+	@Temporal(TemporalType.TIMESTAMP) // in db
 	private Date contractStart;
 
 	@Column(name="contract_end")
+	@Temporal(TemporalType.TIMESTAMP) // in db
 	private Date contractEnd;
-
-	@Column(name="project_id")
-	private Integer projectId;
-
 
 	public User() { }
 
@@ -54,7 +57,6 @@ public class User implements Serializable {
 	public Long getId() {
 		return id;
 	}
-
 
 	public int getStatus() {
 		return status;
@@ -88,11 +90,11 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public String getContractType() {
+	public ContractType getContractType() {
 		return contractType;
 	}
 
-	public void setContractType(String contractType) {
+	public void setContractType(ContractType contractType) {
 		this.contractType = contractType;
 	}
 
@@ -102,14 +104,6 @@ public class User implements Serializable {
 
 	public void setContractEnd(Date contractEnd) {
 		this.contractEnd = contractEnd;
-	}
-
-	public Integer getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
 	}
 
 	@Override
@@ -123,7 +117,6 @@ public class User implements Serializable {
 				", contractType='" + contractType + '\'' +
 				", contractStart=" + contractStart +
 				", contractEnd=" + contractEnd +
-				", projectId=" + projectId +
 				'}';
 	}
 }

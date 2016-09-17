@@ -147,7 +147,6 @@ public class UserDaoImplTest {
 		Assert.assertThat(user, IsNull.notNullValue());
 		Assert.assertThat("email-3", IsEqual.equalTo(user.getEmail()));
 		Assert.assertThat("name-3", IsEqual.equalTo(user.getName()));
-		Assert.assertThat(3, IsEqual.equalTo(user.getProjectId()));
 	}
 
 
@@ -157,10 +156,10 @@ public class UserDaoImplTest {
 		entity.setName("name-" + num);
 		entity.setEmail("email-" + num);
 		entity.setPassword("password-" + num);
-		entity.setProjectId(num);
 		entity.setStatus(num);
 		entity.setContractEnd(new Date(System.currentTimeMillis()));
 		entity.setContractStart(new Date(System.currentTimeMillis() - num));
+
 		return entity;
 	}
 }

@@ -2,7 +2,7 @@ package core.db.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name="project")
@@ -19,9 +19,11 @@ public class Project implements Serializable {
 	private String description;
 
 	@Column(name="project_start")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date projectStart;
 
 	@Column(name="project_end")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date projectEnd;
 
 	@Column(name="successful")
