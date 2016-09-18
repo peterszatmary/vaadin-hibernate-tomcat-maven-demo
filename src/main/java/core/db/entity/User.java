@@ -1,6 +1,7 @@
 package core.db.entity;
 
-import core.ContractType;
+import core.db.types.Address;
+import core.db.types.ContractType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -43,6 +44,12 @@ public class User implements Serializable {
 	@Column(name="contract_end")
 	@Temporal(TemporalType.TIMESTAMP) // in db
 	private Date contractEnd;
+
+	// all Address attributes will be in User table, composition, address alone is not persisted.
+	@Embedded
+	private Address address;
+
+
 
 	public User() { }
 
@@ -106,6 +113,15 @@ public class User implements Serializable {
 		this.contractEnd = contractEnd;
 	}
 
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -114,9 +130,10 @@ public class User implements Serializable {
 				", name='" + name + '\'' +
 				", password='" + password + '\'' +
 				", email='" + email + '\'' +
-				", contractType='" + contractType + '\'' +
+				", contractType=" + contractType +
 				", contractStart=" + contractStart +
 				", contractEnd=" + contractEnd +
+				", address=" + address +
 				'}';
 	}
 }

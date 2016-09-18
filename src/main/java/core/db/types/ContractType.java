@@ -1,4 +1,4 @@
-package core;
+package core.db.types;
 
 public enum ContractType {
 	FULL_TIME,
