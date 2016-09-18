@@ -3,6 +3,7 @@ package core.db.impl;
 
 import core.TestHibernateUtil;
 import core.db.entity.Office;
+import core.db.entity.Project;
 import core.db.entity.User;
 import core.db.ints.UserDao;
 import core.db.types.UserType;
@@ -12,6 +13,8 @@ import org.hibernate.SessionFactory;
 import org.junit.*;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -54,8 +57,8 @@ public class UserDaoImplTest {
 		User afterUpdate = userDao.getById(user.getId());
 		Long countAfter = userDao.countAll();
 
-		Assert.assertThat("newmail", IsEqual.equalTo(afterUpdate.getEmail()));
-		Assert.assertThat(countBefore + 1, IsEqual.equalTo(countAfter));
+		Assert.assertThat(afterUpdate.getEmail(), IsEqual.equalTo("newmail"));
+		Assert.assertThat(countAfter, IsEqual.equalTo(countBefore + 1));
 	}
 
 	@Test
@@ -66,7 +69,7 @@ public class UserDaoImplTest {
 		userDao.create(getUser(3));
 
 		List<User> users = userDao.getAll();
-		Assert.assertThat(3, IsEqual.equalTo(users.size()));
+		Assert.assertThat(users.size(), IsEqual.equalTo(3));
 	}
 
 	@Test
@@ -74,7 +77,7 @@ public class UserDaoImplTest {
 		Long countBefore = userDao.countAll();
 		userDao.create(getUser(1));
 		Long countAfter = userDao.countAll();
-		Assert.assertThat(countBefore + 1, IsEqual.equalTo(countAfter));
+		Assert.assertThat(countAfter, IsEqual.equalTo(countBefore + 1));
 	}
 
 	@Test
@@ -86,15 +89,15 @@ public class UserDaoImplTest {
 		userDao.create(getUser(3));
 
 		Long count = userDao.countAll();
-		Assert.assertThat(3L, IsEqual.equalTo(count));
+		Assert.assertThat(count, IsEqual.equalTo(3L));
 
 		userDao.delete(user);
 		count = userDao.countAll();
 		List<User> users = userDao.getAll();
 
-		Assert.assertThat("email-2", IsEqual.equalTo(users.get(0).getEmail()));
-		Assert.assertThat("email-3", IsEqual.equalTo(users.get(1).getEmail()));
-		Assert.assertThat(2L, IsEqual.equalTo(count));
+		Assert.assertThat(users.get(0).getEmail(), IsEqual.equalTo("email-2"));
+		Assert.assertThat(users.get(1).getEmail(), IsEqual.equalTo("email-3"));
+		Assert.assertThat(count, IsEqual.equalTo(2L));
 	}
 
 	@Test
@@ -109,11 +112,11 @@ public class UserDaoImplTest {
 		List<User> users = userDao.selectPage(2, 4);
 
 		Long count = userDao.countAll();
-		Assert.assertThat(5L, IsEqual.equalTo(count));
-		Assert.assertThat(3, IsEqual.equalTo(users.size()));
-		Assert.assertThat("email-3", IsEqual.equalTo(users.get(0).getEmail()));
-		Assert.assertThat("email-4", IsEqual.equalTo(users.get(1).getEmail()));
-		Assert.assertThat("email-5", IsEqual.equalTo(users.get(2).getEmail()));
+		Assert.assertThat(count, IsEqual.equalTo(5L));
+		Assert.assertThat(users.size(), IsEqual.equalTo(3));
+		Assert.assertThat(users.get(0).getEmail(), IsEqual.equalTo("email-3"));
+		Assert.assertThat(users.get(1).getEmail(), IsEqual.equalTo("email-4"));
+		Assert.assertThat(users.get(2).getEmail(), IsEqual.equalTo("email-5"));
 	}
 
 
@@ -129,10 +132,10 @@ public class UserDaoImplTest {
 		User user = userDao.getByEmailAndPassword("email-1", "password-1");
 
 		Long count = userDao.countAll();
-		Assert.assertThat(5L, IsEqual.equalTo(count));
+		Assert.assertThat(count, IsEqual.equalTo(5L));
 		Assert.assertThat(user, IsNull.notNullValue());
-		Assert.assertThat("email-1", IsEqual.equalTo(user.getEmail()));
-		Assert.assertThat("name-1", IsEqual.equalTo(user.getName()));
+		Assert.assertThat(user.getEmail(), IsEqual.equalTo("email-1"));
+		Assert.assertThat(user.getName(), IsEqual.equalTo("name-1"));
 	}
 
 	@Test
@@ -147,8 +150,11 @@ public class UserDaoImplTest {
 		User user = userDao.getById(3L);
 
 		Assert.assertThat(user, IsNull.notNullValue());
-		Assert.assertThat("email-3", IsEqual.equalTo(user.getEmail()));
-		Assert.assertThat("name-3", IsEqual.equalTo(user.getName()));
+		Assert.assertThat(user.getEmail(), IsEqual.equalTo("email-3"));
+		Assert.assertThat(user.getName(), IsEqual.equalTo("name-3"));
+
+		Assert.assertThat(user.getProjects().size(), IsEqual.equalTo(1));
+		Assert.assertThat(user.getProjects().iterator().next().getName(), IsEqual.equalTo("name-3"));
 	}
 
 
@@ -167,6 +173,13 @@ public class UserDaoImplTest {
 		office.setName("office-name-" + num);
 
 		entity.setOffice(office);
+
+		Project project = new Project();
+		project.setName("name-" + num);
+		project.setDescription("description-" + num);
+		project.setSuccessful(Boolean.FALSE);
+
+		entity.setProjects(new LinkedHashSet<>(Arrays.asList(project)));
 		return entity;
 	}
 }

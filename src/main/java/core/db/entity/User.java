@@ -7,6 +7,7 @@ import core.db.types.UserType;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @NamedQueries({
 		@NamedQuery(name="user.byEmailAndPassword", query="from User where email=:email and password=:password"),
@@ -57,6 +58,24 @@ public class User implements Serializable {
 	@JoinColumn(name= "office_fk")
 	private Office office;
 
+
+	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "user_project",
+			joinColumns = @JoinColumn(name = "user_fk"),
+			inverseJoinColumns = @JoinColumn(name = "project_fk")
+	)
+	private Set<Project> projects;
+
+
+
+	public Set<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(Set<Project> projects) {
+		this.projects = projects;
+	}
 
 	public UserType getUserType() {
 		return userType;

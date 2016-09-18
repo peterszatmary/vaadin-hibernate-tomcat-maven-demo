@@ -3,6 +3,7 @@ package core.db.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Inheritance :
@@ -49,7 +50,23 @@ public class Project implements Serializable {
 	@Column(name="successful")
 	private Boolean successful;
 
+	@ManyToMany(mappedBy = "projects", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	private Set<User> users;
 
+
+
+
+	public Boolean getSuccessful() {
+		return successful;
+	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
 
 	public String getName() {
 		return name;

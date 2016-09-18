@@ -34,7 +34,7 @@ public class OfficeDaoImpl implements OfficeDao {
 	public void create(Office office) {
 		try (Session session = sessionFactory.openSession()) {
 			session.beginTransaction();
-			session.save(office);
+			session.persist(office); // save
 			session.getTransaction().commit();
 		} catch (HibernateException ex) {
 			logger.info("Create error: " + ex.getLocalizedMessage());
@@ -53,7 +53,14 @@ public class OfficeDaoImpl implements OfficeDao {
 
 	@Override
 	public Office getById(Long id) {
-		throw new UnsupportedOperationException();
+		try (Session session = sessionFactory.openSession()) {
+			session.beginTransaction();
+			Office office = session.get(Office.class, id);
+			return office;
+		} catch (HibernateException ex) {
+			logger.info("Get by id error: " + ex.getLocalizedMessage());
+			return null;
+		}
 	}
 
 	@Override

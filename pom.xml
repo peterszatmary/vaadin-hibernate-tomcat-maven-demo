@@ -15,6 +15,7 @@
 		<h2.version>1.4.192</h2.version>
 		<junit.version>4.12</junit.version>
 		<selenium.version>2.52.0</selenium.version>
+		<slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
 		<tomcat.version>8.0.32</tomcat.version>
 		<tomcat.user>tomcat</tomcat.user>
 		<tomcat.password>tomcat</tomcat.password>
@@ -118,11 +119,17 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-log4j12.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
