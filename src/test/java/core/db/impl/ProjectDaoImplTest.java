@@ -2,6 +2,8 @@ package core.db.impl;
 
 
 import core.TestHibernateUtil;
+import core.db.entity.ExternalProject;
+import core.db.entity.InternalProject;
 import core.db.entity.Project;
 import core.db.ints.ProjectDao;
 import org.hamcrest.core.IsEqual;
@@ -40,11 +42,11 @@ public class ProjectDaoImplTest {
 	@Test
 	public void testGetById() {
 
-		projectDao.create(getProject(1));
-		projectDao.create(getProject(2));
-		projectDao.create(getProject(3));
-		projectDao.create(getProject(4));
-		projectDao.create(getProject(5));
+		projectDao.create(getProject(1, Project.class));
+		projectDao.create(getProject(2, ExternalProject.class));
+		projectDao.create(getProject(3, InternalProject.class));
+		projectDao.create(getProject(4, ExternalProject.class));
+		projectDao.create(getProject(5, Project.class));
 
 		Project project = projectDao.getById(3L);
 
@@ -53,11 +55,19 @@ public class ProjectDaoImplTest {
 		Assert.assertThat("name-3", IsEqual.equalTo(project.getName()));
 	}
 
-	private Project getProject(Integer num) {
+	private Project getProject(Integer num, Class type) {
 
 		Boolean status = num % 2 == 0 ? Boolean.TRUE : Boolean.FALSE;
 
-		Project entity = new Project();
+		Project entity;
+		if(ExternalProject.class.equals(type)) {
+			entity = new ExternalProject();
+		} else if (InternalProject.class.equals(type)) {
+			entity = new InternalProject();
+		} else {
+			entity = new Project();
+		}
+
 		entity.setName("name-" + num);
 		entity.setDescription("description-" + num);
 		entity.setSuccessful(status);

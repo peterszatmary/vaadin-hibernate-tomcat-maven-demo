@@ -16,5 +16,7 @@
 		<mapping class="core.db.entity.Office"/>
 		<mapping class="core.db.entity.User"/>
 		<mapping class="core.db.entity.Project"/>
+		<mapping class="core.db.entity.ExternalProject"/>
+		<mapping class="core.db.entity.InternalProject"/>
 	</session-factory>
 </hibernate-configuration> 

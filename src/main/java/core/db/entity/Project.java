@@ -4,8 +4,28 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Inheritance :
+ *
+ * Single-Table-per-Class Hierarchy : everything in one table, with discriminator. default.
+ * Joined-subclass strategy : 2 tables with foreign key. No duplicate attributes/columns in tables. Can lead to poor performance.
+ * Table-per-concrete-class strategy : each class has table representation.
+ * 		duplication on db level. No need for discriminators.
+ *
+ *		@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+ *		@Id
+ *		@GeneratedValue(strategy=GenerationType.TABLE)
+ *		private Long id;
+ *
+ */
 @Entity
 @Table(name="project")
+// Single-Table-per-Class Hierarchy is default so it is no need for using
+// @Inheritance annotation in this case
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn (name="discriminator",
+discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("PROJECT")
 public class Project implements Serializable {
 
 	@Id
