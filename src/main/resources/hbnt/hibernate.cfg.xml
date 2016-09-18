@@ -10,6 +10,7 @@
 		<property name="show_sql">true</property>
 		<property name="connection.pool_size">5</property>
 		<property name="hibernate.id.new_generator_mappings">false</property>
+		<property name="hibernate.hbm2ddl.auto">create</property><!-- creates schema each app first start from entities -->
 
 		<!-- here all entities will come -->
 		<mapping class="core.db.entity.Office"/>
