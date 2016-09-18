@@ -2,6 +2,7 @@ package core.db.entity;
 
 import core.db.types.Address;
 import core.db.types.ContractType;
+import core.db.types.UserType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -49,9 +50,29 @@ public class User implements Serializable {
 	@Embedded
 	private Address address;
 
+	@Enumerated(EnumType.STRING)
+	private UserType userType;
+
+	@ManyToOne(cascade = {CascadeType.ALL}) // to save office to db together with saving user
+	@JoinColumn(name= "office_fk")
+	private Office office;
 
 
-	public User() { }
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
+
+	public Office getOffice() {
+		return office;
+	}
+
+	public void setOffice(Office office) {
+		this.office = office;
+	}
 
 	public Date getContractStart() {
 		return contractStart;
@@ -134,6 +155,8 @@ public class User implements Serializable {
 				", contractStart=" + contractStart +
 				", contractEnd=" + contractEnd +
 				", address=" + address +
+				", userType=" + userType +
+				", office=" + office +
 				'}';
 	}
 }

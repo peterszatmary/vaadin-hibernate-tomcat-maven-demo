@@ -2,8 +2,10 @@ package core.db.impl;
 
 
 import core.TestHibernateUtil;
+import core.db.entity.Office;
 import core.db.entity.User;
 import core.db.ints.UserDao;
+import core.db.types.UserType;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
 import org.hibernate.SessionFactory;
@@ -159,7 +161,12 @@ public class UserDaoImplTest {
 		entity.setStatus(num);
 		entity.setContractEnd(new Date(System.currentTimeMillis()));
 		entity.setContractStart(new Date(System.currentTimeMillis() - num));
+		entity.setUserType(UserType.WORKER);
 
+		Office office = new Office();
+		office.setName("office-name-" + num);
+
+		entity.setOffice(office);
 		return entity;
 	}
 }

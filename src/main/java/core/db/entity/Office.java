@@ -2,6 +2,7 @@ package core.db.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name="office")
@@ -14,7 +15,11 @@ public class Office implements Serializable {
 	@Column(name="name")
 	private String name;
 
-	public Office() { }
+	@OneToMany(mappedBy = "office")
+	private Set<User> users;
+
+
+
 
 	public Long getId() {
 		return id;

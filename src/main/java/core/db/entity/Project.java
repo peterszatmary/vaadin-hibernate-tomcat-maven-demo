@@ -49,7 +49,7 @@ public class Project implements Serializable {
 	@Column(name="successful")
 	private Boolean successful;
 
-	public Project() { }
+
 
 	public String getName() {
 		return name;
