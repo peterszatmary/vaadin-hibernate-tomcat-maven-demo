@@ -2,10 +2,7 @@ package core.db.impl;
 
 
 import core.TestHibernateUtil;
-import core.db.entity.ExternalProject;
-import core.db.entity.InternalProject;
-import core.db.entity.Project;
-import core.db.entity.User;
+import core.db.entity.*;
 import core.db.ints.ProjectDao;
 import core.db.types.UserType;
 import org.hamcrest.core.IsEqual;
@@ -79,7 +76,13 @@ public class ProjectDaoImplTest {
 		entity.setSuccessful(status);
 		entity.setProjectStart(new Date(System.currentTimeMillis()));
 		entity.setProjectEnd(new Date(System.currentTimeMillis() - num));
+		User user = getUser(num, entity);
+		entity.setUsers(new LinkedHashSet<>(Arrays.asList(user)));
+		return entity;
+	}
 
+
+	private User getUser(Integer num, Project project) {
 		User user = new User();
 		user.setName("name-" + num);
 		user.setEmail("email-" + num);
@@ -88,9 +91,7 @@ public class ProjectDaoImplTest {
 		user.setContractEnd(new Date(System.currentTimeMillis()));
 		user.setContractStart(new Date(System.currentTimeMillis() - num));
 		user.setUserType(UserType.WORKER);
-		user.setProjects(new LinkedHashSet<>(Arrays.asList(entity))); // dont forget
-
-		entity.setUsers(new LinkedHashSet<>(Arrays.asList(user)));
-		return entity;
+		user.setProjects(new LinkedHashSet<>(Arrays.asList(project))); // dont forget
+		return user;
 	}
 }

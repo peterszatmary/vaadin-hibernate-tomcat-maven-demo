@@ -6,6 +6,7 @@ import core.db.ints.OfficeDao;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -32,12 +33,18 @@ public class OfficeDaoImpl implements OfficeDao {
 	// - identifier value will be assigned to the persistent instance immediately
 	@Override
 	public void create(Office office) {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			session.persist(office); // save
-			session.getTransaction().commit();
+			tx.commit();
 		} catch (HibernateException ex) {
 			logger.info("Create error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 
@@ -54,7 +61,6 @@ public class OfficeDaoImpl implements OfficeDao {
 	@Override
 	public Office getById(Long id) {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			Office office = session.get(Office.class, id);
 			return office;
 		} catch (HibernateException ex) {
@@ -76,7 +82,6 @@ public class OfficeDaoImpl implements OfficeDao {
 	@Override
 	public Long countAll() {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			return (Long) session.
 					createQuery("select count(*) from Office").
 					uniqueResult();
@@ -86,16 +91,25 @@ public class OfficeDaoImpl implements OfficeDao {
 		}
 	}
 
+
 	@Override
 	public Integer deleteAll() {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
-			return session.
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			int result = session.
 					createQuery("delete from Office").
 					executeUpdate();
+			tx.commit();
+			return result;
 		} catch (HibernateException ex) {
 			logger.info("deleteAll error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
 			return null;
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 }

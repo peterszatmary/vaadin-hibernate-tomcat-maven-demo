@@ -6,6 +6,7 @@ import core.db.ints.ProjectDao;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,12 +31,18 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public void create(Project project) {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			session.persist(project);
 			session.getTransaction().commit();
 		} catch (HibernateException ex) {
 			logger.info("Create error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
+		}  finally {
+			if (session != null) { session.close(); }
 		}
 	}
 
@@ -54,7 +61,6 @@ public class ProjectDaoImpl implements ProjectDao {
 	@Override
 	public Project getById(Long id) {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			Project project = session.get(Project.class, id);
 			return project;
 		} catch (HibernateException ex) {
@@ -76,7 +82,6 @@ public class ProjectDaoImpl implements ProjectDao {
 	@Override
 	public Long countAll() {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			return (Long) session.
 					createQuery("select count(*) from Project").
 					uniqueResult();
@@ -88,14 +93,22 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public Integer deleteAll() {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
-			return session.
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			int result = session.
 					createQuery("delete from Project").
 					executeUpdate();
+			tx.commit();
+			return result;
 		} catch (HibernateException ex) {
 			logger.info("deleteAll error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
 			return null;
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 

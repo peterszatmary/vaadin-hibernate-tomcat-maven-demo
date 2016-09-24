@@ -6,6 +6,7 @@ import core.db.ints.UserDao;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,24 +31,36 @@ public class UserDaoImpl implements UserDao {
 	// - it doesn't guarantee that the identifier value will be assigned to the persistent instance immediately
 	@Override
 	public void create(User user) {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			session.persist(user);
-			session.getTransaction().commit();
+			tx.commit();
 		} catch (HibernateException ex) {
 			logger.info("Create error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 
 	// delete
 	@Override
 	public void delete(User user) {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			session.delete(user);
-			session.getTransaction().commit();
+			tx.commit();
 		} catch (Exception ex) {
 			logger.info("Delete error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 
@@ -55,7 +68,6 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<User> getAll() {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			return session.
 					createQuery("from User").
 					list();
@@ -69,7 +81,6 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User getById(Long id) {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			User user = session.get(User.class, id);
 			return user;
 		} catch (HibernateException ex) {
@@ -81,12 +92,18 @@ public class UserDaoImpl implements UserDao {
 	// update
 	@Override
 	public void update(User user) {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			session.update(user);
-			session.getTransaction().commit();
-		} catch (Exception ex) {
+			tx.commit();
+		} catch (HibernateException ex) {
 			logger.info("Update error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 
@@ -95,7 +112,6 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User getByEmailAndPassword(String email, String password) {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			List<User> list = session.
 					getNamedQuery("user.byEmailAndPassword").
 					setParameter("email", email).
@@ -112,13 +128,12 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<User> selectPage(int start, int count) {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			return session.
 					createQuery("from User").
 					setFirstResult(start).
 					setMaxResults(count).
 					list();
-		} catch (Exception ex) {
+		} catch (HibernateException ex) {
 			logger.info("Select page error: " + ex.getLocalizedMessage());
 			return null;
 		}
@@ -127,7 +142,6 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public Long countAll() {
 		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
 			return (Long) session.
 					createQuery("select count(*) from User").
 					uniqueResult();
@@ -139,14 +153,22 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public Integer deleteAll() {
-		try (Session session = sessionFactory.openSession()) {
-			session.beginTransaction();
-			return session.
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			int result = session.
 					createQuery("delete from User").
 					executeUpdate();
+			tx.commit();
+			return result;
 		} catch (HibernateException ex) {
 			logger.info("deleteAll error: " + ex.getLocalizedMessage());
+			if (tx != null) { tx.rollback(); }
 			return null;
+		} finally {
+			if (session != null) { session.close(); }
 		}
 	}
 }

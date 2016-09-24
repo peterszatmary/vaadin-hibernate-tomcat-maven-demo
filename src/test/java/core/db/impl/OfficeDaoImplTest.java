@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.junit.*;
 
 import java.sql.Date;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -61,31 +62,39 @@ public class OfficeDaoImplTest {
 		Office office = officeDao.getById(3L);
 
 		Assert.assertThat(office, IsNull.notNullValue());
-		Assert.assertThat(office.getName(), IsEqual.equalTo("name-3"));
+		Assert.assertThat(office.getName(), IsEqual.equalTo("office-name-3"));
 		Assert.assertThat(office.getUsers().size(), IsEqual.equalTo(2));
-		Assert.assertThat(office.getUsers().iterator().next().getName(), IsEqual.equalTo("name-30"));
+
+		Iterator<User> it = office.getUsers().iterator();
+		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-1"));
+		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-0"));
+
 	}
 
 
 	private Office getOffice(Integer num) {
 		Office entity = new Office();
-		entity.setName("name-" + num);
+		entity.setName("office-name-" + num);
 
-		User user;
 		Set<User> users = new LinkedHashSet<>();
 		for (int i = 0; i < 2; i++) {
-			user = new User();
-			user.setName("name-" + num + i);
-			user.setEmail("email-" + num + i);
-			user.setPassword("password-" + num + i);
-			user.setStatus(num + i);
-			user.setContractEnd(new Date(System.currentTimeMillis()));
-			user.setContractStart(new Date(System.currentTimeMillis() - num + i));
-			user.setUserType(UserType.STUDENT);
-			user.setOffice(entity); // dont forget
-			users.add(user);
+			users.add(getUser(i, entity));
 		}
 		entity.setUsers(users);
 		return entity;
+	}
+
+
+	private User getUser(Integer num, Office office) {
+		User user = new User();
+		user.setName("user-name-" + num);
+		user.setEmail("user-email-" + num);
+		user.setPassword("user-password-" + num);
+		user.setStatus(num);
+		user.setContractEnd(new Date(System.currentTimeMillis()));
+		user.setContractStart(new Date(System.currentTimeMillis() - num));
+		user.setUserType(UserType.STUDENT);
+		user.setOffice(office); // dont forget
+		return user;
 	}
 }
