@@ -17,15 +17,16 @@ import ui.view.*;
 @Theme("evidence")
 @Widgetset("war.MyAppWidgetset")
 public class EvidenceUI extends UI {
+
+	public Navigator navigator;
+	public static final String REGVIEW = "register";
+	public static final String MAINMANAGERVIEW = "mainManager";
+
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = EvidenceUI.class)
 	public static class Servlet extends VaadinServlet {
 	
 	}
-	public Navigator navigator;
-
-	public static final String REGVIEW = "register";
-	public static final String MAINMANAGERVIEW = "mainManager";
 
 	@Override
 	protected void init(VaadinRequest request) {

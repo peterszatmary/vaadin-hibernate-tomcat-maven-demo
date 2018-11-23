@@ -27,6 +27,10 @@ public class MainManagerView extends VerticalLayout implements View {
 	}
 	private Button enterStudentProjectButton() {
 		Button button = new Button("Enter student's profile", new Button.ClickListener() {
+			/**
+			 * empty for simplicity.
+			 * @param event
+			 */
 			@Override
 			public void buttonClick(ClickEvent event) {
 				
