@@ -62,12 +62,6 @@ public class OfficeDaoImplTest {
 		Assert.assertThat(office, IsNull.notNullValue());
 		Assert.assertThat(office.getName(), IsEqual.equalTo("office-name-3"));
 		Assert.assertThat(office.getUsers().size(), IsEqual.equalTo(2));
-
-		LinkedHashSet usrs = new LinkedHashSet(office.getUsers());
-		Iterator<User> it = usrs.iterator();
-		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-0"));
-		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-1"));
-
 	}
 
 
