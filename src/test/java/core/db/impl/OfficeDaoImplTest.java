@@ -1,6 +1,5 @@
 package core.db.impl;
 
-
 import core.TestHibernateUtil;
 import core.db.entity.Office;
 import core.db.entity.User;
@@ -41,7 +40,6 @@ public class OfficeDaoImplTest {
 		officeDao.deleteAll();
 	}
 
-
 	@Test
 	public void testCreate() {
 		Long countBefore = officeDao.countAll();
@@ -65,9 +63,10 @@ public class OfficeDaoImplTest {
 		Assert.assertThat(office.getName(), IsEqual.equalTo("office-name-3"));
 		Assert.assertThat(office.getUsers().size(), IsEqual.equalTo(2));
 
-		Iterator<User> it = office.getUsers().iterator();
-		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-1"));
+		LinkedHashSet usrs = new LinkedHashSet(office.getUsers());
+		Iterator<User> it = usrs.iterator();
 		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-0"));
+		Assert.assertThat(it.next().getName(), IsEqual.equalTo("user-name-1"));
 
 	}
 
@@ -83,7 +82,6 @@ public class OfficeDaoImplTest {
 		entity.setUsers(users);
 		return entity;
 	}
-
 
 	private User getUser(Integer num, Office office) {
 		User user = new User();
